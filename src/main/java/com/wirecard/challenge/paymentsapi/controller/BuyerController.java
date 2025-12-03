@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
+import com.wirecard.challenge.paymentsapi.dto.BuyerResponse;
 import com.wirecard.challenge.paymentsapi.model.Buyer;
 import com.wirecard.challenge.paymentsapi.repository.BuyerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,15 +26,18 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
+@RequestMapping("/buyer")
 public class BuyerController {
 	
-	@Autowired
-	private BuyerRepository br;
+	private final BuyerService buyerService;
+	public BuyerController(BuyerService buyerService) {
+		this.buyerService = buyerService;
+	}
 	
-	@GetMapping(path="/buyer", produces="application/json")
-	public @ResponseBody Iterable<Buyer> listaBuyers() {
-		Iterable<Buyer> listaBuyers = br.findAll();
-		return listaBuyers;
+	@GetMapping
+	public ResponseEntity<List<BuyerResponse>> listaBuyers() {
+		List<BuyerResponse> lista = buyerService.listaBuyers();
+		return ResponseEntity.ok(list);
 	}
 
 	@GetMapping("/buyer/{id}")
@@ -53,9 +58,14 @@ public class BuyerController {
 	}
 
 	@PostMapping()
-	@ResponseStatus(HttpStatus.OK)
 	public Buyer cadastrarBuyer(@RequestBody @Valid Buyer buyer) {
 		return br.save(buyer);
+	}
+
+	@PostMapping()
+	public ResponseEntity<BuyerResponse> cadastrarBuyer(@RequestBody @Valid BuyerRequest request) {
+		BuyerResponse buyerResponse = buyerService.cadastrarBuyer(request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(buyerResponse);
 	}
 
 	
