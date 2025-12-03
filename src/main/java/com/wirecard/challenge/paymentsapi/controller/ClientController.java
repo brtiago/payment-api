@@ -1,11 +1,13 @@
 package com.wirecard.challenge.paymentsapi.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
+import com.wirecard.challenge.paymentsapi.dto.ClientResponse;
 import com.wirecard.challenge.paymentsapi.model.Client;
 import com.wirecard.challenge.paymentsapi.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /** Classe responsável por controlar as operações e requisições referentes ao Cliente
@@ -28,11 +33,13 @@ public class ClientController {
 	private ClientRepository cr;
 
 	@GetMapping(produces="application/json")
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Iterable<Client> listaClients() {
-		Iterable<Client> listaClients = cr.findAll();
-		return listaClients;
-	}
+	public ResponseEntity<List<ClientResponse>> listaClients() {
+        List<ClientResponse> lista = cr.findAll()
+                .stream()
+                .map(ClientResponse::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(lista);
+    }
 
 	@PostMapping()
 	@ResponseStatus(HttpStatus.OK)

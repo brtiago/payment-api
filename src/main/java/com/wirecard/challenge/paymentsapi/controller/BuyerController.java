@@ -2,7 +2,7 @@ package com.wirecard.challenge.paymentsapi.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import com.wirecard.challenge.paymentsapi.model.Buyer;
 import com.wirecard.challenge.paymentsapi.repository.BuyerRepository;

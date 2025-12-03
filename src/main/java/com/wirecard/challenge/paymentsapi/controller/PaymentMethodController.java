@@ -1,6 +1,6 @@
 package com.wirecard.challenge.paymentsapi.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import com.wirecard.challenge.paymentsapi.model.PaymentMethod;
 import com.wirecard.challenge.paymentsapi.repository.PaymentMethodRepository;
