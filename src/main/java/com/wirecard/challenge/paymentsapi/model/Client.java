@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.wirecard.challenge.paymentsapi.dto.ClientRequest;
 
 //Classe que representa o Cliente que receberá o pagamento//
 
@@ -25,9 +26,16 @@ public class Client {
 	
 	@Column(name="name")
 	private String name;
-	
 
-	public Long getId() {
+
+	public Client() {
+	}
+
+	public Client(ClientRequest request) {
+		this.name = request.name();
+    }
+
+    public Long getId() {
 		return id;
 	}
 
