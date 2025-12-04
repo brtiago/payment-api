@@ -1,5 +1,6 @@
 package com.wirecard.challenge.paymentsapi.service;
 
+import com.wirecard.challenge.paymentsapi.dto.ClientRequest;
 import com.wirecard.challenge.paymentsapi.dto.ClientResponse;
 import com.wirecard.challenge.paymentsapi.model.Client;
 import com.wirecard.challenge.paymentsapi.repository.ClientRepository;
@@ -40,13 +41,13 @@ class ClientServiceTest {
     void buscarListaClient_QuandoExistemClientes_DeveRetornarListaComTodosClientes() {
         // Given
         List<Client> clientes = List.of(
-                Client.ClientBuilder.builder()
+                Client.builder()
                         .withName("Amazon")
                         .build(),
-                Client.ClientBuilder.builder()
+                Client.builder()
                         .withName("Globo")
                         .build(),
-                Client.ClientBuilder.builder()
+                Client.builder()
                         .withName("Magalu")
                         .build()
         );
@@ -64,6 +65,25 @@ class ClientServiceTest {
                 () -> assertEquals("Magalu", responses.get(2).name())
         );
         verify(repository).findAll();
+    }
+
+    @Test
+    void cadastrarClient_ComDadosValidos_DeveSalvarERetornarClientResponse() {
+        // Given
+        ClientRequest request = new ClientRequest("Amazon");
+        Client clientSalvo = Client.builder()
+                .withId(1L)
+                .withName("Amazon")
+                .build();
+
+        // When
+        when(repository.save(any(Client.class))).thenReturn(clientSalvo);
+        ClientResponse response = service.cadastrarClient(request);
+
+        // Then
+        verify(repository).save(any(Client.class));
+        assertEquals("Amazon", response.name());
+        assertEquals(1L, response.id());
     }
 
 

@@ -21,25 +21,10 @@ public class Client {
 	@Column(name="name")
 	private String name;
 
-	public Client() {
-	}
+	public Client() {}
 
-    public record ClientBuilder(String name) {
-        public Client build() {
-            return new Client(new ClientRequest(this.name));
-        }
-
-        public static ClientBuilder builder() {
-            return new ClientBuilder(null);
-        }
-
-        public ClientBuilder withName(String name) {
-            return new ClientBuilder(name);
-        }
-    }
-
-	public Client(ClientRequest request) {
-		this.name = request.name();
+    public Client(ClientRequest request) {
+        this.name = request.name();
     }
 
     public Long getId() {
@@ -57,12 +42,47 @@ public class Client {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 
 	@Override
 	public String toString() {
 		return "Client [id=" + id + ", name=" + name + "]";
 	}
+
+
+    public static Builder builder() { return new Builder(); }
+
+    public static class Builder {
+        private Long id;
+        private String name;
+
+        private Builder() {}
+
+        public Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Client build() {
+            Client client = new Client();
+            if (this.id != null) {
+                client.setId(this.id);
+            }
+            if (this.name != null) {
+                client.setName(this.name);
+            }
+            return client;
+        }
+
+        public static Builder builder() {
+            return Builder.builder();
+        }
+
+    }
 
 }
 
