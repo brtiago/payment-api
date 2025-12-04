@@ -7,9 +7,6 @@ import com.wirecard.challenge.paymentsapi.service.BuyerService;
 import jakarta.validation.Valid;
 
 import com.wirecard.challenge.paymentsapi.dto.BuyerResponse;
-import com.wirecard.challenge.paymentsapi.model.Buyer;
-import com.wirecard.challenge.paymentsapi.repository.BuyerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**Classe responsável por controlar operações e requisições referentes ao Buyer
@@ -36,13 +31,13 @@ public class BuyerController {
 		this.buyerService = buyerService;
 	}
 	
-	@GetMapping
+	@GetMapping()
 	public ResponseEntity<List<BuyerResponse>> listaBuyers() {
 		List<BuyerResponse> lista = buyerService.listaBuyers();
 		return ResponseEntity.ok(lista);
 	}
 
-	@GetMapping("/buyer/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity getBuyer(@PathVariable("id") Long id){
         BuyerResponse buyerFound = buyerService.getBuyer(id);
         return ResponseEntity.ok(buyerFound);

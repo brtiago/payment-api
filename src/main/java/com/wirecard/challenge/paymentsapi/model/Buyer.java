@@ -33,6 +33,8 @@ public class Buyer {
 	@Column(name="nome")
 	private String nome;
 
+    public Buyer(){}
+
     public Buyer(BuyerRequest request) {
         this.nome = request.nome();
         this.email = request.email();
