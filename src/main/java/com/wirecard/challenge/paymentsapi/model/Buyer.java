@@ -2,6 +2,7 @@ package com.wirecard.challenge.paymentsapi.model;
 
 import java.util.List;
 
+import com.wirecard.challenge.paymentsapi.dto.BuyerRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,8 +32,14 @@ public class Buyer {
 	
 	@Column(name="nome")
 	private String nome;
-	
-	public Long getId() {
+
+    public Buyer(BuyerRequest request) {
+        this.nome = request.nome();
+        this.email = request.email();
+        this.cpf = request.cpf();
+    }
+
+    public Long getId() {
 		return id;
 	}
 
