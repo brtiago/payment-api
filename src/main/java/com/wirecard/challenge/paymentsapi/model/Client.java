@@ -1,17 +1,11 @@
 package com.wirecard.challenge.paymentsapi.model;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.wirecard.challenge.paymentsapi.dto.ClientRequest;
 
 //Classe que representa o Cliente que receberá o pagamento//
@@ -20,16 +14,29 @@ import com.wirecard.challenge.paymentsapi.dto.ClientRequest;
 public class Client {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="client_id")
 	private Long id;
 	
 	@Column(name="name")
 	private String name;
 
-
 	public Client() {
 	}
+
+    public record ClientBuilder(String name) {
+        public Client build() {
+            return new Client(new ClientRequest(this.name));
+        }
+
+        public static ClientBuilder builder() {
+            return new ClientBuilder(null);
+        }
+
+        public ClientBuilder withName(String name) {
+            return new ClientBuilder(name);
+        }
+    }
 
 	public Client(ClientRequest request) {
 		this.name = request.name();
@@ -56,6 +63,7 @@ public class Client {
 	public String toString() {
 		return "Client [id=" + id + ", name=" + name + "]";
 	}
-	
-	
+
 }
+
+
