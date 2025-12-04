@@ -2,6 +2,8 @@ package com.wirecard.challenge.paymentsapi.controller;
 
 import java.util.List;
 
+import com.wirecard.challenge.paymentsapi.dto.BuyerRequest;
+import com.wirecard.challenge.paymentsapi.service.BuyerService;
 import jakarta.validation.Valid;
 
 import com.wirecard.challenge.paymentsapi.dto.BuyerResponse;
@@ -37,7 +39,7 @@ public class BuyerController {
 	@GetMapping
 	public ResponseEntity<List<BuyerResponse>> listaBuyers() {
 		List<BuyerResponse> lista = buyerService.listaBuyers();
-		return ResponseEntity.ok(list);
+		return ResponseEntity.ok(lista);
 	}
 
 	@GetMapping("/buyer/{id}")
@@ -57,21 +59,15 @@ public class BuyerController {
 			return new ResponseEntity(buyerProcurado, HttpStatus.OK);
 	}
 
-	@PostMapping()
-	public Buyer cadastrarBuyer(@RequestBody @Valid Buyer buyer) {
-		return br.save(buyer);
-	}
+    @PostMapping()
+    public ResponseEntity<BuyerResponse> cadastrarBuyer(@RequestBody @Valid BuyerRequest request) {
+        BuyerResponse buyerResponse = buyerService.cadastrarBuyer(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(buyerResponse);
+    }
 
-	@PostMapping()
-	public ResponseEntity<BuyerResponse> cadastrarBuyer(@RequestBody @Valid BuyerRequest request) {
-		BuyerResponse buyerResponse = buyerService.cadastrarBuyer(request);
-		return ResponseEntity.status(HttpStatus.CREATED).body(buyerResponse);
-	}
-
-	
-	@DeleteMapping()
-	public Buyer deletarBuyer(@RequestBody Buyer buyer) {
-		br.delete(buyer);
-		return buyer;
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deletarBuyer(@PathVariable Long id) {
+		buyerService.deletarBuyer(id);
+		return ResponseEntity.noContent().build();
 	}
 }
