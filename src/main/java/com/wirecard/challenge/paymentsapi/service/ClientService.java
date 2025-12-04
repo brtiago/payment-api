@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
 public class ClientService {

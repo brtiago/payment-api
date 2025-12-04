@@ -4,6 +4,7 @@ import com.wirecard.challenge.paymentsapi.dto.ClientRequest;
 import com.wirecard.challenge.paymentsapi.dto.ClientResponse;
 import com.wirecard.challenge.paymentsapi.model.Client;
 import com.wirecard.challenge.paymentsapi.repository.ClientRepository;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -84,6 +85,19 @@ class ClientServiceTest {
         verify(repository).save(any(Client.class));
         assertEquals("Amazon", response.name());
         assertEquals(1L, response.id());
+    }
+
+    @Test
+    void cadastrarClient_ComNomeVazio_DeveLancarExcecaoDeValidacao() {
+        // Given
+        ClientRequest request = new ClientRequest("");
+
+        // When
+        assertThrows(ConstraintViolationException.class,
+                () -> service.cadastrarClient(request));
+
+        // Then
+        verify(repository, never()).save(any());
     }
 
 
