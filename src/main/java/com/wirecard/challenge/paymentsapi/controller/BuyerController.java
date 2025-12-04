@@ -44,19 +44,8 @@ public class BuyerController {
 
 	@GetMapping("/buyer/{id}")
 	public ResponseEntity getBuyer(@PathVariable("id") Long id){
-			List<Buyer> listaBuyer = br.findAll();
-			Buyer buyerProcurado = null;
-			
-			for(Buyer buyer: listaBuyer){
-				if(buyer.getId()==id) {
-					buyerProcurado = buyer;
-				}
-			}
-			
-			if(buyerProcurado == null) {
-				return new ResponseEntity("No Customer found for ID " + id, HttpStatus.BAD_GATEWAY);
-			}
-			return new ResponseEntity(buyerProcurado, HttpStatus.OK);
+        BuyerResponse buyerFound = buyerService.getBuyer(id);
+        return ResponseEntity.ok(buyerFound);
 	}
 
     @PostMapping()

@@ -25,6 +25,12 @@ public class BuyerService {
                 .toList();
     }
 
+    public BuyerResponse getBuyer(Long id) {
+        return buyerRepository.findById(id)
+                .map(BuyerResponse::fromEntity)
+                .orElseThrow(() -> new EntityNotFoundException("No Customer found for ID " + id));
+    }
+
     @Transactional
     public BuyerResponse cadastrarBuyer(BuyerRequest request) {
         Buyer entidade = new Buyer(request);
