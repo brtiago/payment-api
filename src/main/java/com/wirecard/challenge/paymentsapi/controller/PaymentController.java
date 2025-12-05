@@ -2,6 +2,7 @@ package com.wirecard.challenge.paymentsapi.controller;
 
 import java.util.List;
 
+import com.wirecard.challenge.paymentsapi.dto.BoletoRequest;
 import jakarta.validation.Valid;
 
 import com.wirecard.challenge.paymentsapi.model.Boleto;
