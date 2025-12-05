@@ -10,10 +10,12 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 public class ClientService {
 
     private final ClientRepository clientRepository;
@@ -29,7 +31,7 @@ public class ClientService {
     }
 
     @Transactional
-    public ClientResponse cadastrarClient(ClientRequest request) {
+    public ClientResponse cadastrarClient(@Valid ClientRequest request) {
         Client entidade = new Client(request);
         Client salvo = clientRepository.save(entidade);
         return ClientResponse.fromEntity(salvo);
