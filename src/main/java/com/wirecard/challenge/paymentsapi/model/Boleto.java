@@ -1,5 +1,6 @@
 package com.wirecard.challenge.paymentsapi.model;
 
+import com.wirecard.challenge.paymentsapi.dto.BoletoRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +26,17 @@ public class Boleto {
 	@Column(name="expirationDate")
 	private String expirationDate;
 
-	public long getId() {
+    public Boleto(BoletoRequest request) {
+        this.code = request.code();
+        this.expirationDate = request.expirationDate();
+    }
+
+    public Boleto(String code, String expirationDate) {
+        this.code = code;
+        this.expirationDate = expirationDate;
+    }
+
+    public long getId() {
 		return id;
 	}
 
