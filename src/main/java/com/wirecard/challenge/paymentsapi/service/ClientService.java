@@ -1,5 +1,6 @@
 package com.wirecard.challenge.paymentsapi.service;
 
+import com.wirecard.challenge.paymentsapi.dto.ClientMapper;
 import com.wirecard.challenge.paymentsapi.model.Client;
 import com.wirecard.challenge.paymentsapi.dto.ClientRequest;
 import com.wirecard.challenge.paymentsapi.dto.ClientResponse;
@@ -19,8 +20,11 @@ import org.springframework.validation.annotation.Validated;
 public class ClientService {
 
     private final ClientRepository clientRepository;
-    public ClientService(ClientRepository clientRepository) {
+    private final ClientMapper clientMapper;
+
+    public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
         this.clientRepository = clientRepository;
+        this.clientMapper = clientMapper;
     }
 
     public List<ClientResponse> listaClients() {
@@ -32,9 +36,9 @@ public class ClientService {
 
     @Transactional
     public ClientResponse cadastrarClient(@Valid ClientRequest request) {
-        Client entidade = new Client(request);
+        Client entidade = clientMapper.toEntity(request);
         Client salvo = clientRepository.save(entidade);
-        return ClientResponse.fromEntity(salvo);
+        return clientMapper.toResponse(salvo);
     }
 
     @Transactional

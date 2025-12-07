@@ -1,7 +1,6 @@
 package com.wirecard.challenge.paymentsapi.model;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +22,6 @@ public class Payment {
 	//Quantia R$ do pagamento//
 	
 	@NotNull
-	@Column(name="amount")
 	private Double amount;
 	
 	//Define e armazena o método de pagamento//
@@ -34,8 +32,6 @@ public class Payment {
 	private PaymentMethod paymentMethod;
 	
 	//Define o Status do pagamento//
-	
-	@Column(name="status")
 	private PaymentStatus status;
 	
 
@@ -43,7 +39,6 @@ public class Payment {
 	private Buyer buyer;
 	
 	@ManyToOne
-	@JoinColumn(name="client_id", referencedColumnName="client_id")
 	private Client client;
 	
 	public enum PaymentStatus {
