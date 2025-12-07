@@ -1,5 +1,6 @@
 package com.wirecard.challenge.paymentsapi.service;
 
+import com.wirecard.challenge.paymentsapi.dto.BuyerMapper;
 import com.wirecard.challenge.paymentsapi.dto.BuyerRequest;
 import com.wirecard.challenge.paymentsapi.dto.BuyerResponse;
 import com.wirecard.challenge.paymentsapi.model.Buyer;
@@ -14,20 +15,23 @@ import java.util.List;
 public class BuyerService {
 
     private final BuyerRepository buyerRepository;
-    public BuyerService(BuyerRepository buyerRepository) {
+    private final BuyerMapper buyerMapper;
+
+    public BuyerService(BuyerRepository buyerRepository, BuyerMapper buyerMapper) {
         this.buyerRepository = buyerRepository;
+        this.buyerMapper = buyerMapper;
     }
 
     public List<BuyerResponse> listaBuyers() {
         return buyerRepository.findAll()
                 .stream()
-                .map(BuyerResponse::fromEntity)
+                .map(buyerMapper::toResponse)
                 .toList();
     }
 
     public BuyerResponse getBuyer(Long id) {
         return buyerRepository.findById(id)
-                .map(BuyerResponse::fromEntity)
+                .map(buyerMapper::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException("No Customer found for ID " + id));
     }
 
@@ -35,7 +39,7 @@ public class BuyerService {
     public BuyerResponse cadastrarBuyer(BuyerRequest request) {
         Buyer entidade = new Buyer(request);
         Buyer salvo = buyerRepository.save(entidade);
-        return BuyerResponse.fromEntity(salvo);
+        return buyerMapper.toResponse(salvo);
     }
 
     @Transactional
