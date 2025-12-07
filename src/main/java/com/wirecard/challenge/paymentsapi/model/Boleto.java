@@ -1,29 +1,29 @@
 package com.wirecard.challenge.paymentsapi.model;
 
 import com.wirecard.challenge.paymentsapi.dto.BoletoRequest;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 
 
 // Classe que representa a forma de pagamento "BOLETO"//
 @Entity
+@Table(name = "boletos")
+
+@Builder
+@Getter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Boleto {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    private long id;
 
 	//Código de pagamento do boleto
-	
-	@Column(name="code")
-	private String code;
+    private String code;
 
 	//Data de vencimento do boleto.
-
-	@Column(name="expirationDate")
 	private String expirationDate;
 
     public Boleto(BoletoRequest request) {
@@ -35,35 +35,4 @@ public class Boleto {
         this.code = code;
         this.expirationDate = expirationDate;
     }
-
-    public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public String getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(String expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
-	@Override
-	public String toString() {
-		return "Boleto [id=" + id + ", code=" + code + ", expirationDate=" + expirationDate + "]";
-	}
-	
-	
 }
