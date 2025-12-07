@@ -1,5 +1,6 @@
 package com.wirecard.challenge.paymentsapi.model;
 
+import com.wirecard.challenge.paymentsapi.dto.PaymentRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,5 +45,13 @@ public class Payment {
 	
 	@ManyToOne
 	private Client client;
-	
+
+    public Payment(PaymentRequest request) {
+        this.amount = request.amount();
+        this.paymentMethod = request.paymentMethod();
+        this.status = request.paymentStatus();
+        this.buyer = request.buyer();
+        this.client = request.client();
+    }
+
 }
