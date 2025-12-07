@@ -17,7 +17,7 @@ import jakarta.validation.constraints.NotNull;
 public class Payment {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	//Quantia R$ do pagamento//
@@ -40,7 +40,6 @@ public class Payment {
 	
 
 	@ManyToOne
-	@JoinColumn(name="buyer_id", referencedColumnName="buyer_id")
 	private Buyer buyer;
 	
 	@ManyToOne
