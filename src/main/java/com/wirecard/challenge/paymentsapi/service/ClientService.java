@@ -15,6 +15,8 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @Validated
 public class ClientService {
@@ -30,7 +32,7 @@ public class ClientService {
     public List<ClientResponse> listaClients() {
         return clientRepository.findAll()
                 .stream()
-                .map(ClientResponse::fromEntity)
+                .map(clientMapper::toResponse)
                 .toList();
     }
 
