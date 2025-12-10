@@ -9,6 +9,8 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDate;
+
 /* Classe que representa o Cartão de Crédito utilizado nos pagamentos,
 pelos compradores */
 
@@ -41,10 +43,19 @@ public class CreditCard {
 	
 	//Data de validade do cartão de crédito//
 	
-	private String expirationDate;
+	private LocalDate expirationDate;
 	
 	//Código verificador do cartão//
 	
 	@NotBlank(message="Favor preencher o CVV")
 	private String cvv;
+
+    public boolean validarCC(String cardNumber) {
+        return cardNumber.matches("\\d{16}");
+    }
+
+    public boolean validarDV(String dv) {
+        return dv.matches("\\d{3}");
+    }
+
 }
