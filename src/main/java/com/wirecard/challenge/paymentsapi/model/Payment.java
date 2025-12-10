@@ -1,13 +1,7 @@
 package com.wirecard.challenge.paymentsapi.model;
 
 import com.wirecard.challenge.paymentsapi.dto.PaymentRequest;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -33,11 +27,11 @@ public class Payment {
 	
 	//Define e armazena o método de pagamento//
 	
-	@NotNull
-	@OneToOne(cascade = {CascadeType.ALL})
+	@Enumerated(EnumType.STRING)
 	private PaymentMethod paymentMethod;
 	
 	//Define o Status do pagamento//
+    @Enumerated(EnumType.STRING)
 	private PaymentStatus status;
 	
 	@ManyToOne
@@ -49,7 +43,7 @@ public class Payment {
     public Payment(PaymentRequest request) {
         this.amount = request.amount();
         this.paymentMethod = request.paymentMethod();
-        this.status = request.paymentStatus();
+        setStatus(PaymentStatus.CREATED);
         this.buyer = request.buyer();
         this.client = request.client();
     }
