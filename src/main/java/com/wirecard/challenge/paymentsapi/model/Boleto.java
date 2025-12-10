@@ -4,6 +4,8 @@ import com.wirecard.challenge.paymentsapi.dto.BoletoRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 
 // Classe que representa a forma de pagamento "BOLETO"//
 @Entity
@@ -24,14 +26,14 @@ public class Boleto {
     private String code;
 
 	//Data de vencimento do boleto.
-	private String expirationDate;
+	private LocalDate expirationDate;
 
     public Boleto(BoletoRequest request) {
         this.code = request.code();
         this.expirationDate = request.expirationDate();
     }
 
-    public Boleto(String code, String expirationDate) {
+    public Boleto(String code, LocalDate expirationDate) {
         this.code = code;
         this.expirationDate = expirationDate;
     }

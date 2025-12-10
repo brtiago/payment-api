@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.time.LocalDate;
+
 //Classe que representa o proprietário do Cartão de Crédito//
 @Entity
 @Getter
@@ -23,7 +25,7 @@ public class Holder {
 	
 	// Data de Nascimento //
 	
-	private String birthDate;
+	private LocalDate birthDate;
 	
 	//Número do documento //
 	
