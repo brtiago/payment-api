@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+
 /** Classe responsável por controlar operações e requisições referentes aos Boletos
  *
  *
@@ -30,7 +32,7 @@ public class BoletoController {
     }
 
     // TODO: Eliminar este método apos a refatoração do PaymentController
-    public Boleto createBoleto(String code, String expDate) {
+    public Boleto createBoleto(String code, LocalDate expDate) {
         return new Boleto(code, expDate);
     }
 

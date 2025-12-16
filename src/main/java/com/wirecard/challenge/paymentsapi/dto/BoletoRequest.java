@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public record BoletoRequest(
         String code,
         @DateTimeFormat(pattern = "dd-MM-yyyy")
-        LocalDate expirationDate
+        LocalDate expirationDate,
+        Double amount
 ) {
 }

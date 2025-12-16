@@ -25,11 +25,14 @@ public class Boleto {
 	//Código de pagamento do boleto
     private String code;
 
+    private Double amount;
+
 	//Data de vencimento do boleto.
 	private LocalDate expirationDate;
 
     public Boleto(BoletoRequest request) {
         this.code = request.code();
+        this.amount = request.amount();
         this.expirationDate = request.expirationDate();
     }
 
