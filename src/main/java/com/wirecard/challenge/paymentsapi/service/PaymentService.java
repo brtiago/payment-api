@@ -3,6 +3,7 @@ package com.wirecard.challenge.paymentsapi.service;
 import com.wirecard.challenge.paymentsapi.dto.*;
 import com.wirecard.challenge.paymentsapi.model.Payment;
 import com.wirecard.challenge.paymentsapi.repository.PaymentRepository;
+import com.wirecard.challenge.paymentsapi.service.processor.PaymentProcessorFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,15 @@ import java.util.List;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final BoletoService boletoService;
     private final PaymentMapper paymentMapper;
+    private final PaymentProcessorFactory processorFactory;
 
     public PaymentService(PaymentRepository paymentRepository,
                           PaymentMapper paymentMapper,
-                          BoletoService boletoService) {
+                          PaymentProcessorFactory processorFactory) {
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
-        this.boletoService = boletoService;
+        this.processorFactory = processorFactory;
     }
 
     public List<PaymentResponse> listaPayments() {
@@ -34,32 +35,24 @@ public class PaymentService {
     public PaymentResponse getPayment(Long id) {
         return paymentRepository.findById(id)
                 .map(paymentMapper::toResponse)
-                .orElseThrow(() -> new EntityNotFoundException("No Payment found for ID \" + id"));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "No Payment found for ID \" + id"
+                ));
     }
 
+    @Transactional
     public PaymentResponse cadastrarPayment(PaymentRequest request) {
-        return switch (request.paymentMethod()) {
-            case BOLETO -> processBoletoPayment(request);
-            case CREDIT_CARD, DEBIT_CARD -> processCardPayment(request);
-            case PIX -> processPixPayment(request);
-            case CASH -> processCashPayment(request);
-        };
-    }
-
-    private PaymentResponse processCardPayment(PaymentRequest request) {
-    }
-
-    private PaymentResponse processPixPayment(PaymentRequest request) {
-    }
-
-    private PaymentResponse processCashPayment(PaymentRequest request) {
-    }
-
+        return processorFactory
+                .getProcessor(request.paymentMethod())
+                .process(request);
+    };
 
     @Transactional
     public void deletarPayment(Long id) {
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Payment não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Payment não encontrado: " + id
+                ));
         paymentRepository.delete(payment);
     }
 
