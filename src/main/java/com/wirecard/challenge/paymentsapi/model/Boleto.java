@@ -23,21 +23,13 @@ public class Boleto {
     private long id;
 
 	//Código de pagamento do boleto
+    @Column(nullable = false)
     private String code;
 
+    @Column(nullable = false)
     private Double amount;
 
 	//Data de vencimento do boleto.
+    @Column(nullable = false)
 	private LocalDate expirationDate;
-
-    public Boleto(BoletoRequest request) {
-        this.code = request.code();
-        this.amount = request.amount();
-        this.expirationDate = request.expirationDate();
-    }
-
-    public Boleto(String code, LocalDate expirationDate) {
-        this.code = code;
-        this.expirationDate = expirationDate;
-    }
 }

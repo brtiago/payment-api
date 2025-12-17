@@ -30,10 +30,4 @@ public class BoletoController {
         BoletoResponse boletoCriado = boletoService.createBoleto(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(boletoCriado);
     }
-
-    // TODO: Eliminar este método apos a refatoração do PaymentController
-    public Boleto createBoleto(String code, LocalDate expDate) {
-        return new Boleto(code, expDate);
-    }
-
 }
