@@ -1,11 +1,12 @@
 package com.wirecard.challenge.paymentsapi.service.processor;
 
 import com.wirecard.challenge.paymentsapi.dto.*;
-import com.wirecard.challenge.paymentsapi.model.Payment;
-import com.wirecard.challenge.paymentsapi.model.PaymentMethod;
-import com.wirecard.challenge.paymentsapi.model.PaymentStatus;
+import com.wirecard.challenge.paymentsapi.model.*;
+import com.wirecard.challenge.paymentsapi.repository.BuyerRepository;
+import com.wirecard.challenge.paymentsapi.repository.ClientRepository;
 import com.wirecard.challenge.paymentsapi.repository.PaymentRepository;
 import com.wirecard.challenge.paymentsapi.service.BoletoService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
@@ -16,15 +17,21 @@ public class BoletoPaymentProcessor implements PaymentProcessor {
     private final BoletoService boletoService;
     private final PaymentRepository paymentRepository;
     private final PaymentMapper paymentMapper;
+    private final BuyerRepository buyerRepository;
+    private final ClientRepository clientRepository;
 
     public BoletoPaymentProcessor(
             BoletoService boletoService,
             PaymentRepository paymentRepository,
-            PaymentMapper paymentMapper
+            PaymentMapper paymentMapper,
+            BuyerRepository buyerRepository,
+            ClientRepository clientRepository
     ) {
         this.boletoService = boletoService;
         this.paymentRepository = paymentRepository;
         this.paymentMapper = paymentMapper;
+        this.buyerRepository = buyerRepository;
+        this.clientRepository = clientRepository;
     }
 
     @Override
@@ -32,21 +39,26 @@ public class BoletoPaymentProcessor implements PaymentProcessor {
     public PaymentResponse process(PaymentRequest request) {
         gerarBoleto(request.amount());
 
+        Buyer buyer = buyerRepository.findById(request.buyer().getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Buyer não encontrado com ID: " + request.buyer().getId()
+                        ));
+        Client client = clientRepository.findById(request.buyer().getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Client não encontrado com ID: " + request.client().getId()
+                ));
+
         Payment payment = Payment.builder()
                 .amount(request.amount())
                 .paymentMethod(PaymentMethod.BOLETO)
                 .status(PaymentStatus.CREATED)
-                .buyer(request.buyer())
-                .client(request.client())
+                .buyer(buyer)
+                .client(client)
                 .build();
 
         Payment savedPayment = paymentRepository.save(payment);
 
-        Payment paymentWithDetails = paymentRepository
-                .findByIdWithDetails(savedPayment.getId())
-                .orElseThrow(() -> new RuntimeException("Erro ao buscar pagamento"));
-
-        return paymentMapper.toResponse(paymentWithDetails);
+        return paymentMapper.toResponse(savedPayment);
     }
 
     @Override
@@ -67,7 +79,6 @@ public class BoletoPaymentProcessor implements PaymentProcessor {
     }
 
     private String gerarCodigoBarras() {
-        String code = "239398762934239398762934239398762934239398762934";
-        return code;
+        return "239398762934239398762934239398762934239398762934";
     }
 }

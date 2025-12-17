@@ -43,13 +43,13 @@ class ClientServiceTest {
         // Given
         List<Client> clientes = List.of(
                 Client.builder()
-                        .withName("Amazon")
+                        .name("Amazon")
                         .build(),
                 Client.builder()
-                        .withName("Globo")
+                        .name("Globo")
                         .build(),
                 Client.builder()
-                        .withName("Magalu")
+                        .name("Magalu")
                         .build()
         );
         when(repository.findAll()).thenReturn(clientes);
@@ -73,8 +73,8 @@ class ClientServiceTest {
         // Given
         ClientRequest request = new ClientRequest("Amazon");
         Client clientSalvo = Client.builder()
-                .withId(1L)
-                .withName("Amazon")
+                .id(1L)
+                .name("Amazon")
                 .build();
 
         // When

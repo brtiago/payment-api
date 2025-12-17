@@ -9,7 +9,9 @@ import com.wirecard.challenge.paymentsapi.model.PaymentMethod;
 import com.wirecard.challenge.paymentsapi.model.PaymentStatus;
 import com.wirecard.challenge.paymentsapi.repository.PaymentRepository;
 import com.wirecard.challenge.paymentsapi.service.CreditCardService;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CardPaymentProcessor implements PaymentProcessor {
 
     private final CreditCardService creditCardService;
