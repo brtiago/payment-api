@@ -1,5 +1,6 @@
 package com.wirecard.challenge.paymentsapi.model;
 
+import com.wirecard.challenge.paymentsapi.dto.BuyerRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,5 +25,11 @@ public class Buyer {
 	private String email;
 	private String cpf;
 	private String nome;
+
+    public Buyer(BuyerRequest request) {
+        this.email = request.email();
+        this.cpf = request.cpf();
+        this.nome = request.nome();
+    }
 
 }
