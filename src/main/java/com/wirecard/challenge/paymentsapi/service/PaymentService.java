@@ -36,7 +36,7 @@ public class PaymentService {
         return paymentRepository.findById(id)
                 .map(paymentMapper::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No Payment found for ID \" + id"
+                        "No Payment found for ID " + id
                 ));
     }
 

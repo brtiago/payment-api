@@ -22,13 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/payment")
 public class PaymentController {
 
-	String resposta = "";
-	
-	//Construção da String de resposta para o usuário
-	
-	StringBuilder stringBuilder = new StringBuilder(resposta);
-
-
     private final PaymentRepository paymentRepository;
     private final PaymentService paymentService;
     public PaymentController(
@@ -38,13 +31,6 @@ public class PaymentController {
         this.paymentRepository = paymentRepository;
         this.paymentService = paymentService;
     }
-
-	@Autowired
-	private CreditCardController ccc;
-	
-	@Autowired
-	private BoletoController bc;
-
 
     @GetMapping()
     public ResponseEntity<List<PaymentResponse>> listaPayments() {
@@ -58,13 +44,11 @@ public class PaymentController {
         return ResponseEntity.ok(paymentFound);
 	}
 
-
     @PostMapping()
     public ResponseEntity<PaymentResponse> cadastrarPayment(@RequestBody @Valid PaymentRequest request) {
         PaymentResponse paymentCriado = paymentService.cadastrarPayment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(paymentCriado);
     }
-
 
     @DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletarPayment(@PathVariable Long id) {
